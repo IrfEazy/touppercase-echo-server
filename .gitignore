@@ -3,3 +3,5 @@
 /server/server.iml
 /touppercase-echo-server.iml
 /src/
+/out/
+/log.txt
