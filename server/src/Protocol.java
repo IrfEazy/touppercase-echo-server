@@ -95,10 +95,6 @@ public class Protocol implements Closeable, Runnable {
         }
     }
 
-    private void clientMessage(String s) {
-        this.out.println(this.serverToClient.getInetAddress() + ":" + this.serverToClient.getPort() + "\t" + this.userName + ":\t" + s);
-    }
-
     public String getUserName() {
         return this.userName;
     }
