@@ -13,22 +13,15 @@ public class Protocol implements Closeable, Runnable {
     private BufferedReader in;
     private File log;
     private PrintWriter out;
-    private Socket serverToClient;
+    private final Socket serverToClient;
     private String userName;
 
-    public Protocol() {
+    public Protocol(@NotNull Socket serverToClient) {
         try {
             log = new File("log.txt");
             if (!log.exists()) {
                 log.createNewFile();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Protocol(@NotNull Socket serverToClient) {
-        try {
             this.in = new BufferedReader(new InputStreamReader(serverToClient.getInputStream()));
             this.out = new PrintWriter(serverToClient.getOutputStream(), true);
             selectUsername();
@@ -73,15 +66,17 @@ public class Protocol implements Closeable, Runnable {
     @Override
     public void run() {
         try {
-            this.out.println("Insert strings. Insert 'quit' to exit.");
+            this.out.println("Insert text. Insert 'quit' to exit.");
             String request;
 
             while ((request = this.in.readLine()) != null) {
-                this.clientMessage(request);
+                //this.clientMessage(request);
                 saveRequest(request);
                 String reply = request.toUpperCase();
                 this.out.println(reply);
-                if (reply.equals("QUIT")) break;
+                if (reply.equals("QUIT")) {
+                    break;
+                }
             }
 
             this.close();
@@ -93,7 +88,7 @@ public class Protocol implements Closeable, Runnable {
     private void saveRequest(String request) {
         try {
             PrintWriter writer = new PrintWriter(new FileWriter(log, true));
-            writer.println("<" + time.getTime() + " - " + this.serverToClient.getInetAddress() + ">:<" + request);
+            writer.println("<" + time.getTime() + " - " + this.serverToClient.getInetAddress() + ">:<" + request + ">");
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();

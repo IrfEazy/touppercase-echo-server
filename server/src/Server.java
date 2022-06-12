@@ -15,7 +15,7 @@ public class Server {
      * the system. It next starts a conversation with the client since he wants to left the server.
      */
     private static void startServer() {
-        try (ServerSocket server = new ServerSocket(1234); Protocol protocol = new Protocol()) {
+        try (ServerSocket server = new ServerSocket(1234)) {
             System.out.println("Waiting for clients...");
             ExecutorService service = Executors.newCachedThreadPool();
 
